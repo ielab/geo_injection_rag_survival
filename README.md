@@ -112,9 +112,27 @@ Document text is assembled as `product_title + "\n" + product_bullet_point`.
 
 ## 3. Environment Setup
 
+1. Create your environment with Python 3.11
+
 ```bash
-conda env create -f environment.yml
+conda create -n geo-injection-rag python=3.11
+```
+
+2. Activate this environment
+
+```bash
 conda activate geo-injection-rag
+```
+
+3. Install pip dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Install the local listwise ranker
+
+```bash
 pip install -e RAG_attack_pipeline/llm-rankers/
 ```
 
@@ -212,7 +230,7 @@ For a full parameter reference, see [`RAG_attack_pipeline/README.md`](RAG_attack
 ```
 geo_injection_rag_survival/
 ├── README.md
-├── environment.yml
+├── requirements.txt
 ├── run_validate_all_sampled200_local.sh  # Reproduces all Stage 3 results
 ├── images/
 │   └── surge_pipeline.svg
