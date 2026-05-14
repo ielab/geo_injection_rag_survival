@@ -10,7 +10,8 @@ This is the official repo for the paper "Can It Reach the Generator? Investigati
 2. [Dataset](#2-dataset)
 3. [Environment Setup](#3-environment-setup)
 4. [Running the Pipeline](#4-running-the-pipeline)
-5. [Directory Structure](#5-directory-structure)
+5. [Reproducing Paper Results](#5-reproducing-paper-results)
+6. [Directory Structure](#6-directory-structure)
 
 ---
 
@@ -169,13 +170,7 @@ Download the attack data from HuggingFace (see [Stage 2 — Attack](#stage-2--at
 
 ### Stage 3 — Validation
 
-Pre-computed baseline runs are provided in `RAG_attack_pipeline/runs/`. To reproduce all paper results at once, use the provided script (after downloading attack data from HuggingFace):
-
-```bash
-bash run_validate_all_sampled200_local.sh ./attack_data
-```
-
-Or set `--baseline_run_dir` manually to run a single configuration.
+To reproduce all paper results at once, see [Section 5 — Reproducing Paper Results](#5-reproducing-paper-results). The commands below show how to run a single configuration manually.
 
 #### Frozen-context (`--mode validate`)
 
@@ -225,7 +220,45 @@ For a full parameter reference, see [`RAG_attack_pipeline/README.md`](RAG_attack
 
 ---
 
-## 5. Directory Structure
+## 5. Reproducing Paper Results
+
+All results in the paper use the **200-query sampled baseline** included in this repo at `RAG_attack_pipeline/runs/`. Reproducing the full Stage 3 evaluation requires two inputs that are already available:
+
+| Input | Location |
+|-------|----------|
+| Pre-computed baseline runs (BM25 + Dense, 200 queries) | `RAG_attack_pipeline/runs/bm25_baseline_200_Qwen3-8B_listwise/` and `RAG_attack_pipeline/runs/dense_baseline_200_Qwen3-8B_listwise/` |
+| Attack documents (28 configurations) | [Euanyu/geo-injection-rag-attack-data](https://huggingface.co/datasets/Euanyu/geo-injection-rag-attack-data) on HuggingFace |
+
+**Step 1 — Download attack data:**
+
+```bash
+huggingface-cli download Euanyu/geo-injection-rag-attack-data \
+    --repo-type dataset --local-dir ./attack_data
+```
+
+**Step 2 — Run all 56 validation jobs (28 × FC + 28 × E2E):**
+
+```bash
+bash run_validate_all_sampled200_local.sh ./attack_data
+```
+
+This script iterates over all combinations of retriever (`bm25`, `dense`), attack method (`core_reasoning`, `core_review`, `ioa`, `raf`, `srp`, `sts`, `tap`), and injection position (`pos6`, `pos10`). Each job runs both the frozen-context (FC) and end-to-end (E2E) validation modes. Results are saved to:
+
+```
+RAG_attack_pipeline/runs/{retriever}_{FC|E2E}_{model}_{method}_{position}/
+```
+
+For example: `RAG_attack_pipeline/runs/bm25_FC_Qwen3-8B_ioa_pos6/`
+
+You can override the reranker or GPU count via environment variables:
+
+```bash
+RERANKER=Qwen/Qwen3-8B TENSOR_PARALLEL=2 bash run_validate_all_sampled200_local.sh ./attack_data
+```
+
+---
+
+## 6. Directory Structure
 
 ```
 geo_injection_rag_survival/

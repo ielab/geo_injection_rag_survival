@@ -962,10 +962,11 @@ def run_validate(args: argparse.Namespace) -> None:
         ``attack_eval_report.json``
         ``attack_eval_report_verbose.json``
     """
-    timestamp = getattr(args, "run_name", None) or time.strftime("%Y%m%d_%H%M%S")
-    run_dir   = os.path.join(
+    _name   = getattr(args, "run_name", None)
+    run_dir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        "runs", f"validate_{timestamp}",
+        "runs",
+        _name if _name else f"validate_{time.strftime('%Y%m%d_%H%M%S')}",
     )
     os.makedirs(run_dir, exist_ok=True)
 
@@ -1300,10 +1301,11 @@ def run_validate_e2e(args: argparse.Namespace) -> None:
         ``attack_eval_report.json``
         ``attack_eval_report_verbose.json``
     """
-    timestamp = getattr(args, "run_name", None) or time.strftime("%Y%m%d_%H%M%S")
-    run_dir   = os.path.join(
+    _name   = getattr(args, "run_name", None)
+    run_dir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
-        "runs", f"e2e_{timestamp}",
+        "runs",
+        _name if _name else f"e2e_{time.strftime('%Y%m%d_%H%M%S')}",
     )
     os.makedirs(run_dir, exist_ok=True)
 
