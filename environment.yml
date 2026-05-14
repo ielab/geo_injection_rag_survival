@@ -1,0 +1,38 @@
+name: geo-injection-rag
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - openjdk=21
+  - maven
+  - git
+  - pip:
+      - torch
+      - torchvision
+      - torchaudio
+      - transformers
+      - sentence-transformers
+      - accelerate
+      - datasets
+      - pandas
+      - scipy
+      - scikit-learn
+      - tqdm
+      - matplotlib
+      - seaborn
+      - nltk
+      - rank-bm25
+      - pytrec-eval
+      - pyserini
+      - vllm
+      - wandb
+      - fastapi
+      - uvicorn
+      - pydantic
+      - sentencepiece
+      - tokenizers
+      - safetensors
+      - huggingface-hub
+      - requests
+      - pyyaml
