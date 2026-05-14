@@ -645,72 +645,6 @@ def _patch_pool(candidate_pool: dict, attacked_docs_path: str):
     return records, patched
 
 
-def _print_rerank_input_debug(
-    candidate_pool: dict,
-    run: dict,
-    attacked_records: list,
-    rerank_top_k: int,
-) -> None:
-    """
-    Print the ranked doc list that will be fed to the reranker for every query,
-    with clear markers on attacked documents.
-
-    For each query shows:
-      rank | doc_id | esci_label | title (truncated) | ** ATTACKED pos=X method=Y **
-
-    Call this just before reranker.rerank() to verify attacked docs are present.
-    """
-    # Build lookup: (query_id, doc_id) -> attack info string
-    attack_info: dict[tuple, str] = {}
-    for rec in attacked_records:
-        key = (str(rec["query_id"]), str(rec["doc_id"]))
-        pos    = rec.get("selected_position", "?")
-        method = rec.get("attack_method", "?")
-        label  = rec.get("esci_label", "?")
-        attack_info[key] = f"pos={pos} method={method} esci={label}"
-
-    print("\n" + "─" * 72)
-    print(f"  [DEBUG] Reranker input list  (top_k={rerank_top_k})")
-    print("─" * 72)
-
-    n_queries_with_both = 0
-    for qid, ranked in sorted(run.items()):
-        top_docs = ranked[:rerank_top_k]
-        attacked_in_window = [
-            (i + 1, pid) for i, (pid, _) in enumerate(top_docs)
-            if (str(qid), str(pid)) in attack_info
-        ]
-
-        entry     = candidate_pool.get(qid)
-        query_txt = entry.query if entry else "?"
-        print(f"\n  Query {qid}: \"{query_txt}\"")
-        print(f"  {'Rank':<5} {'DocID':<15} {'Title (truncated)':<45} {'Note'}")
-        print(f"  {'----':<5} {'-----':<15} {'------------------':<45} {'----'}")
-
-        for rank, (pid, score) in enumerate(top_docs, start=1):
-            cand  = next((c for c in entry.candidates if c.pid == pid), None) if entry else None
-            title = (cand.text.replace("\n", " ")[:45] if cand else "")
-            key   = (str(qid), str(pid))
-            note  = f"** ATTACKED {attack_info[key]} **" if key in attack_info else ""
-            print(f"  {rank:<5} {pid:<15} {title:<45} {note}")
-
-        n_attacked = len(attacked_in_window)
-        if n_attacked == 0:
-            print(f"  !! WARNING: no attacked docs in top-{rerank_top_k} for this query")
-        elif n_attacked == 1:
-            r, pid = attacked_in_window[0]
-            print(f"  -> 1 attacked doc in window (rank {r})")
-        else:
-            ranks_str = ", ".join(f"rank {r}" for r, _ in attacked_in_window)
-            print(f"  -> {n_attacked} attacked docs in window ({ranks_str})")
-            n_queries_with_both += 1
-
-    print("\n" + "─" * 72)
-    print(f"  [DEBUG] Queries with ≥2 attacked docs in reranker window: "
-          f"{n_queries_with_both}/{len(run)}")
-    print("─" * 72 + "\n")
-
-
 def _rank_in_run(run: dict, qid: str, pid: str) -> int | None:
     """Return 1-based rank of (qid, pid) in a TREC run dict, else None."""
     for i, (p, _) in enumerate(run.get(qid, []), start=1):
@@ -1058,9 +992,6 @@ def run_validate(args: argparse.Namespace) -> None:
     )
     print(f"    {len(attacked_records)} attack targets  ({n_mod} with modified content)")
     attack_docs_by_label = _records_by_label(attacked_records)
-
-    # 3.5 Debug: print the full reranker input list so we can verify attacked docs are present
-    _print_rerank_input_debug(patched_pool, rerank_seed_run, attacked_records, args.rerank_top_k)
 
     # 4. Rerank  (or load a pre-computed run to skip this expensive step)
     reranker = None
@@ -1420,9 +1351,6 @@ def run_validate_e2e(args: argparse.Namespace) -> None:
         if rec["doc_id"] in attacked_bm25_run.get(rec["query_id"], {})
     )
     print(f"    Attack docs retrieved by {rtype.upper()}: {n_retrieved}/{len(attacked_records)}")
-
-    # 5.5 Debug: print the full reranker input list so we can verify attacked docs are present
-    _print_rerank_input_debug(patched_pool, attacked_bm25_run, attacked_records, args.rerank_top_k)
 
     # 6. LLM reranking on attacked BM25 candidates
     if not args.reranker:
