@@ -185,8 +185,8 @@ PYTHONPATH=. python RAG_attack_pipeline/run_pipeline.py \
 PYTHONPATH=. python RAG_attack_pipeline/run_pipeline.py \
     --mode validate_e2e \
     --jsonl RAG_attack_pipeline/dataset/task_1_test_filtered_k_40.jsonl \
-    --attacked_docs    <BASELINE_RUN_DIR>/attacked_docs.jsonl \
     --baseline_run_dir <BASELINE_RUN_DIR> \
+    --attacked_docs    <BASELINE_RUN_DIR>/attacked_docs.jsonl \
     --retriever_type bm25 \
     --retrieve_top_k 40 \
     --reranker Qwen/Qwen3-8B \
@@ -200,6 +200,8 @@ PYTHONPATH=. python RAG_attack_pipeline/run_pipeline.py \
     --use_vllm \
     --tensor_parallel_size 1
 ```
+
+> For the dense baseline, replace `--retriever_type bm25` with `--retriever_type dense` and point `--baseline_run_dir` at `RAG_attack_pipeline/runs/dense_baseline_200_Qwen3-8B_listwise`.
 
 For a full parameter reference, see [`RAG_attack_pipeline/README.md`](RAG_attack_pipeline/README.md).
 
