@@ -1283,11 +1283,17 @@ def run_validate_e2e(args: argparse.Namespace) -> None:
             qrel = json.load(fh)
         baseline_bm25_run = load_trec(stage1_trec)
         print(f"    Baseline {rtype.upper()} run: {len(baseline_bm25_run)} queries")
-        # Filter both to attacked queries only
         if _filter_qids:
             qrel              = {k: v for k, v in qrel.items()              if k in _filter_qids}
             baseline_bm25_run = {k: v for k, v in baseline_bm25_run.items() if k in _filter_qids}
             print(f"    [filter_query_ids] TREC + qrel filtered → {len(baseline_bm25_run)} queries")
+        # Restrict the corpus pool to the same queries as the baseline run so
+        # that E2E retrieval runs on exactly those queries, not the full JSONL.
+        baseline_qids = set(baseline_bm25_run.keys())
+        corpus.candidate_pool = {k: v for k, v in corpus.candidate_pool.items() if k in baseline_qids}
+        corpus.qrel           = {k: v for k, v in corpus.qrel.items()           if k in baseline_qids}
+        qrel                  = {k: v for k, v in qrel.items()                  if k in baseline_qids}
+        print(f"    Corpus pool restricted to {len(corpus.candidate_pool)} baseline queries")
     else:
         qrel = corpus.qrel
         baseline_bm25_run = None
