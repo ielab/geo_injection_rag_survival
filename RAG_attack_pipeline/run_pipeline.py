@@ -914,8 +914,7 @@ def run_validate(args: argparse.Namespace) -> None:
     if args.reranked_trec:
         print(f"  Reranked TREC : {args.reranked_trec}  (skipping reranking)")
     else:
-        print(f"  Rerank top-k  : {args.rerank_top_k}  "
-              f"(must be >= highest attack position, i.e. >= 20)")
+        print(f"  Rerank top-k  : {args.rerank_top_k}  ")
 
     # 1. Load corpus
     print(f"\n[1] Loading corpus: {args.jsonl}")
