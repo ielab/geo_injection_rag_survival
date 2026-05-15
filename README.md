@@ -91,12 +91,12 @@ Files are organised as `<retriever>/<method>_<position>_attacked.jsonl`:
 **File schema** — `attacked_docs.jsonl`:
 ```json
 {
-  "query_id": "42", "query": "waterproof hiking boots",
-  "doc_id": "B099", "doc_rank": 18,
-  "doc_title": "...", "esci_label": "I", "qrel_score": 0.0,
+  "query_id": "1404", "query": "100 languages i love you without card",
+  "doc_id": "B089SV9YP1", "doc_rank": 10,
+  "doc_title": "INFUSEU Sunflower Pendant Necklace That Says I Love You in 100 Languages for Women Mom Girlfriend Sterling Silver Jewelry You Are My Sunshine", "esci_label": "E", "qrel_score": 1.0,
   "attack_method": "ioa",
   "original_doc_content": "<original text>",
-  "doc_content": "<adversarially modified text>"
+  "doc_content": "<original text> + <injection text>"
 }
 ```
 
