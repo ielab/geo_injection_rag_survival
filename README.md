@@ -329,6 +329,7 @@ For example: `RAG_attack_pipeline/runs/bm25_FC_Qwen3-8B_ioa_pos6/`
 ```
 geo_injection_rag_survival/
 ├── README.md
+├── LICENSE
 ├── requirements.txt
 ├── run_validate_all_sampled200_local.sh  # Reproduces all Stage 3 results
 ├── images/
