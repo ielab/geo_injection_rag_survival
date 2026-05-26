@@ -43,8 +43,8 @@ The pipeline is structured around three sequential stages. Each stage depends on
 ```
 Stage 1: Simulation  ──►  Stage 2: Attack  ──►  Stage 3: Validation
    run_pipeline.py            (attack data)          run_pipeline.py
-   --mode baseline                                   --mode validate
-                                                     --mode validate_e2e
+   --mode baseline                                   --mode validate (FC)
+                                                     --mode validate_e2e (E2E)
 ```
 
 ### Stage 1 — 🔍 Simulation (`run_pipeline.py --mode baseline`)
