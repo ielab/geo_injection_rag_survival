@@ -237,7 +237,7 @@ PYTHONPATH=. python RAG_attack_pipeline/run_pipeline.py \
 
 ### Stage 2 — Attack
 
-Download the attack data from HuggingFace (see [Stage 2 — Attack](#stage-2----attack) above for the download command and file layout), then proceed to Stage 3.
+Download the attack data from HuggingFace, then proceed to Stage 3.
 
 ### Stage 3 — Validation
 
