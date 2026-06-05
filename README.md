@@ -31,6 +31,7 @@
 5. [Running the Pipeline](#5--running-the-pipeline)
 6. [Reproducing Paper Results](#6--reproducing-paper-results)
 7. [Directory Structure](#7--directory-structure)
+8. [Citation](#8--citation)
 
 ---
 
@@ -358,4 +359,19 @@ geo_injection_rag_survival/
         └── llmrankers/
             ├── rankers.py
             └── listwise.py
+```
+
+---
+
+## 8. 📝 Citation
+
+If you use this work, please cite:
+
+```bibtex
+@article{yin2026can,
+  title={Can It Reach the Generator? Investigating the Survival of Prompt-Injection Attacks in Realistic RAG Settings},
+  author={Yin, Yu and Wang, Shuai and Koopman, Bevan and Zuccon, Guido},
+  journal={arXiv preprint arXiv:2605.28017},
+  year={2026}
+}
 ```
