@@ -5,8 +5,8 @@
 ### *Can It Reach the Generator? Investigating the Survival of GEO Prompt-Injection Attacks in Realistic RAG Settings*
 
 <p>
-  <a href="#">
-    <img src="https://img.shields.io/badge/📄%20Paper-Coming%20Soon-red?style=for-the-badge" alt="Paper">
+  <a href="https://arxiv.org/abs/2605.28017">
+    <img src="https://img.shields.io/badge/📄%20arXiv-2605.28017-red?style=for-the-badge" alt="Paper">
   </a>
   &nbsp;
   <a href="https://huggingface.co/datasets/Euanyu/geo-injection-rag-attack-data">
